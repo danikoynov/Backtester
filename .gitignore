@@ -1,0 +1,18 @@
+# Build artifacts
+/build/
+/cmake-build-*/
+
+# CMake files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# IDEs
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
