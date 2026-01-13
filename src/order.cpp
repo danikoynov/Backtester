@@ -53,7 +53,13 @@ namespace bt {
                 break;
         }
 
-        
+        if (limit_price_ && *limit_price <= 0.0) {
+            throw std::invalid_argument("Limit price must be positive");
+        }
+
+        if (stop_price_ && *stop_price <= 0) {
+            throw std::invalid_argument("Stop price must be positive");
+        }
     }
 
 }

@@ -21,8 +21,8 @@ namespace bt {
             Order(OrderType type,
                   Side side,
                   std::int64_t quantity,
-                  std::optional<double> limit_price,
-                  std::optional<double> stop_price);
+                  std::optional<double> limit_price = std::nullopt,
+                  std::optional<double> stop_price = std::nullopt);
     
         private:
             OrderType type_;
