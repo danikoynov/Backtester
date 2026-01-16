@@ -10,6 +10,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(unit_tests
     test_order.cpp
+    test_portfolio.cpp
 )
 
 target_link_libraries(unit_tests
