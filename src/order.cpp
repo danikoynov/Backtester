@@ -3,7 +3,6 @@
 #include <cstdint>
 
 namespace bt {
-
     Order::Order(OrderType type,
                  Side side,
                  std::int64_t quantity,
