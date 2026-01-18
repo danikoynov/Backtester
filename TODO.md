@@ -4,6 +4,11 @@
     - Add an order execution Class
     - Add a strategy interface/Class
     - Add an engine Class
+    - Add start and end time for the data_fetcher
+
+## Small fixes
+
+    - Make the fetcher work with python3 too
 
 ## Control Flow
 
@@ -17,8 +22,22 @@
 ## Testing
 
     - Add additional tests on the Portfolio class
+    - Add tests on Data Fetcher
 
 ## Documentation
 
+    - Add requirements for the python scripts
     - Add documentation on Portfolio Class
     - Add documentation on Order Class
+
+## Nice to do
+
+    - add a standard language formatting
+
+## Done
+
+    - Ticker Class
+    - Timeframe Enum Class
+    - Portfolio Class
+    - Order Class
+    - Set up Google test system
