@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "portfolio.hpp" 
+#include "domain/portfolio.hpp" 
 
 using namespace bt;
 
