@@ -1,7 +1,9 @@
 # Creates a library with given files
 add_library(bt_core
-    order.cpp
-    portfolio.cpp
+    domain/order.cpp
+    domain/ticker.cpp
+    domain/portfolio.cpp
+    data/data_fetcher.cpp
 )
 
 # Every time some file uses the library,

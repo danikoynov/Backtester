@@ -11,6 +11,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(unit_tests
     test_order.cpp
     test_portfolio.cpp
+    test_data_fetcher.cpp
 )
 
 target_link_libraries(unit_tests
@@ -20,4 +21,6 @@ target_link_libraries(unit_tests
 )
 
 include(GoogleTest)
-gtest_discover_tests(unit_tests)
+gtest_discover_tests(unit_tests
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
