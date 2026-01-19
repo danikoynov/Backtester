@@ -5,7 +5,7 @@
 namespace bt {
 
     Portfolio::Portfolio(double initial_value, 
-                         const std::map<std::string, double> &initial_prices)
+                         const std::unordered_map<std::string, double> &initial_prices)
         : initial_value_(initial_value), 
           cash_(initial_value), 
           instrument_price_(initial_prices){    
@@ -48,7 +48,7 @@ namespace bt {
         instrument_price_.at(symbol) = latest_price;
     }    
 
-    void Portfolio::update_prices(const std::map<std::string, double> &latest_prices) {
+    void Portfolio::update_prices(const std::unordered_map<std::string, double> &latest_prices) {
         for (auto it = latest_prices.begin(); it != latest_prices.end(); ++it) { 
             update_price(it -> first, it -> second);
         }

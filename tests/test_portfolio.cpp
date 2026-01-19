@@ -6,7 +6,7 @@ using namespace bt;
 
 
 TEST(PortfolioCtor, PortfolioConstructsSuccessfuly){
-    std::map<std::string, double> initial_prices;
+    std::unordered_map<std::string, double> initial_prices;
     initial_prices["AAPL"] = 150.0;
     initial_prices["NVDA"] = 125.0;
     double initial_value = 1000.0;
@@ -15,7 +15,7 @@ TEST(PortfolioCtor, PortfolioConstructsSuccessfuly){
 
 
 TEST(PortfolioCtor, InitialValueNegativeThrows) {
-    std::map<std::string, double> initial_prices;
+    std::unordered_map<std::string, double> initial_prices;
     initial_prices["AAPL"] = 150.0;
     initial_prices["NVDA"] = 125.0;
     double initial_value = -1000.0;
@@ -25,7 +25,7 @@ TEST(PortfolioCtor, InitialValueNegativeThrows) {
 }
 
 TEST(PortfolioGetter, InitialValueGetter) {
-    std::map<std::string, double> initial_prices;
+    std::unordered_map<std::string, double> initial_prices;
     initial_prices["AAPL"] = 150.0;
     initial_prices["NVDA"] = 125.0;
     double initial_value = 1000.0;
