@@ -5,7 +5,22 @@
 #include <filesystem>
 
 namespace fs = std::filesystem;
+
 namespace bt{
+    
+    std::vector<std::string> DataFetcher::split_csv_line(const std::string &line) {
+        std::vector<std::string> out;
+        int last_comma = -1, line_size = line.size();
+        for (int i = 0; i < line_size; i ++) {
+            if (line[i] == ',')
+            {
+                out.push_back(line.substr(last_comma + 1, i - last_comma - 1));
+                last_comma = i;
+            }
+        }
+        out.push_back(line.substr(last_comma + 1, line_size - last_comma - 1));
+        return out;
+    }
 
     DataFetcher::DataFetcher(
         const std::vector<Ticker>& instruments,
@@ -14,7 +29,6 @@ namespace bt{
         : instruments_(instruments), timeframe_(timeframe) {
         
     }   
-
 
     void DataFetcher::populate_ticker(Ticker ticker) const{
         assert(fs::exists(script_path));
