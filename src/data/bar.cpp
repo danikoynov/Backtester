@@ -16,7 +16,7 @@ namespace bt {
         double high,
         double low,
         double close,
-        double volume)
+        std::int64_t volume)
         : timestamp_(timestamp),
           open_(open),
           high_(high),
@@ -29,7 +29,7 @@ namespace bt {
     Timestamp Bar::timestamp() const {
         return timestamp_;
     }
-    
+
     double Bar::open() const {
         return open_;
     }
@@ -46,7 +46,7 @@ namespace bt {
         return close_;
     }
 
-    double Bar::volume() const {
+    std::int64_t Bar::volume() const {
         return volume_;
     }
 

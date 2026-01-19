@@ -17,7 +17,7 @@ namespace bt {
                 double high,
                 double low,
                 double close,
-                double volume
+                std::int64_t volume
             );
 
             Timestamp timestamp() const;
@@ -25,7 +25,7 @@ namespace bt {
             double high() const;
             double low() const;
             double close() const;
-            double volume() const;
+            std::int64_t volume() const;
 
         private:
             Timestamp timestamp_;
@@ -33,7 +33,7 @@ namespace bt {
             double high_;
             double low_;
             double close_;
-            double volume_;
+            std::int64_t volume_;
 
     };
 }
