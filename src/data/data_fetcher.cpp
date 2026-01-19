@@ -18,7 +18,8 @@ namespace bt{
         Timeframe timeframe
     )
         : instruments_(instruments), timeframe_(timeframe) {
-        
+        populate_tickers();
+        load_data_from_csvs();
     }   
 
     void DataFetcher::populate_ticker(Ticker ticker) const{
