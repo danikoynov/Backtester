@@ -1,6 +1,7 @@
 ## Features
 
-    - Add a Data Fetcher
+    - OHLC Class
+    - Container for Bars inside Data Fetcher
     - Add an order execution Class
     - Add a strategy interface/Class
     - Add an engine Class
@@ -36,6 +37,7 @@
 
 ## Done
 
+    - Data Fetcher
     - Ticker Class
     - Timeframe Enum Class
     - Portfolio Class
