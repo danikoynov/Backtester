@@ -1,11 +1,15 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include "data/bar.hpp"
 #include "domain/timeframe.hpp"
 #include "domain/ticker.hpp"
 
 namespace bt {
+
     static const std::string script_path = "scripts/fetch_yf.py";
+    static const std::string data_path = "data";
 
     class DataFetcher { 
         public:
@@ -15,14 +19,17 @@ namespace bt {
             );
             void populate_ticker(Ticker ticker) const;
             void populate_tickers() const;
-            static std::vector<std::string> split_csv_line(const std::string &line);
-        
+            void read_bars_from_csv(const std::string& ticker); 
+            void load_data_from_csvs();
+            
         private:
             std::string convert_timeframe_to_yf() const;
 
 
             const std::vector<Ticker> &instruments_;
             Timeframe timeframe_;
+            std::unordered_map<std::string, std::vector<Bar>>data;
+            std::unordered_map<std::string, int>cursor;
 
     };
 }

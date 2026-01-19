@@ -1,27 +1,18 @@
 #include "data/data_fetcher.hpp"
+#include "data/detail.hpp"
+#include "data/bar.hpp"
 #include <stdexcept>
 #include <vector>
 #include <cassert>
+#include <fstream>
+#include <charconv>
+
 #include <filesystem>
 
 namespace fs = std::filesystem;
 
 namespace bt{
-    
-    std::vector<std::string> DataFetcher::split_csv_line(const std::string &line) {
-        std::vector<std::string> out;
-        int last_comma = -1, line_size = line.size();
-        for (int i = 0; i < line_size; i ++) {
-            if (line[i] == ',')
-            {
-                out.push_back(line.substr(last_comma + 1, i - last_comma - 1));
-                last_comma = i;
-            }
-        }
-        out.push_back(line.substr(last_comma + 1, line_size - last_comma - 1));
-        return out;
-    }
-
+   
     DataFetcher::DataFetcher(
         const std::vector<Ticker>& instruments,
         Timeframe timeframe
@@ -54,6 +45,38 @@ namespace bt{
     void DataFetcher::populate_tickers() const {
         for (auto ticker: instruments_) {
             populate_ticker(ticker);
+        }
+    }
+
+    void DataFetcher::read_bars_from_csv(const std::string& ticker) {
+
+        std::string file_path = data_path + "/" + ticker + "/" + convert_timeframe_to_yf();
+        std::ifstream file(file_path);
+
+        if (!file.is_open())
+            throw std::runtime_error("Failed to open CSV file: " + file_path);
+
+        std::string line;
+        std::getline(file, line); /// Header line
+
+        while(std::getline(file, line)) {
+            std::vector<std::string> res = split_csv_line(line);
+
+            Timestamp ts = parse_timestamp_seconds(res[0]);
+            double open = parse_double(res[1]);
+            double high = parse_double(res[2]);
+            double low = parse_double(res[3]);
+            double close = parse_double(res[4]);
+            std::int64_t volume = parse_int64_t(res[5]);
+            
+            Bar bar(ts, open, high, low, close, volume);
+            data[ticker].push_back(bar);
+        }   
+    }
+
+    void DataFetcher::load_data_from_csvs() {
+        for (Ticker ticker: instruments_) {
+            read_bars_from_csv(ticker.str());
         }
     }
 
