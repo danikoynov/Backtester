@@ -2,7 +2,7 @@
 #include <charconv>
 #include <string>
 #include <vector>
-
+#include <stdexcept>
 namespace bt {
 
      
@@ -20,7 +20,7 @@ namespace bt {
         return out;
     }
 
-    inline double parse_double(std::string_view sv) {
+    double parse_double(std::string_view sv) {
         if (sv.empty())
             throw std::invalid_argument("Empty string");
 
@@ -34,7 +34,7 @@ namespace bt {
     }
 
     
-    inline std::int64_t parse_int64_t(std::string_view sv) {
+    std::int64_t parse_int64_t(std::string_view sv) {
         if (sv.empty())
             throw std::invalid_argument("Empty string");
 
@@ -47,7 +47,7 @@ namespace bt {
         return value;
     }
 
-    inline int parse_int(std::string_view sv) {
+    int parse_int(std::string_view sv) {
         if (sv.empty())
             throw std::invalid_argument("Empty string");
 
@@ -61,7 +61,7 @@ namespace bt {
     }
 
 
-    inline Timestamp parse_timestamp_seconds(std::string_view sv) {
+    Timestamp parse_timestamp_seconds(std::string_view sv) {
         if (sv[4]  != '-' || sv[7]  != '-' ||
             sv[10] != ' ' ||
             sv[13] != ':' || sv[16] != ':' ||
@@ -85,8 +85,8 @@ namespace bt {
         
         const std::chrono::year_month_day ymd {
             std::chrono::year{year},
-            std::chrono::month{month},
-            std::chrono::day{day}
+            std::chrono::month{static_cast<unsigned>(month)},
+            std::chrono::day{static_cast<unsigned>(day)}
         };
 
         Timestamp ts = std::chrono::sys_days{ymd} +
