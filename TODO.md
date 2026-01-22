@@ -1,8 +1,5 @@
 ## Features
 
-    - OHLC Class
-    - Container for Bars inside Data Fetcher
-    - Add an order execution Class
     - Add a strategy interface/Class
     - Add an engine Class
     - Add start and end time for the data_fetcher
@@ -22,8 +19,10 @@
 
 ## Testing
 
-    - Add additional tests on the Portfolio class
+    - Add additional tests on Portfolio class
     - Add tests on Data Fetcher
+    - Add tests on detail
+    - Add tests on Bar class
 
 ## Documentation
 
@@ -37,6 +36,10 @@
 
 ## Done
 
+    - Execution logic
+    - Fill class
+    - OHLC Class
+    - Container for Bars inside Data Fetcher
     - Data Fetcher
     - Ticker Class
     - Timeframe Enum Class
