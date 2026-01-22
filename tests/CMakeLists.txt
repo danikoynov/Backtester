@@ -12,6 +12,7 @@ add_executable(unit_tests
     test_order.cpp
     test_portfolio.cpp
     test_data_fetcher.cpp
+    test_order_book.cpp
 )
 
 target_link_libraries(unit_tests
