@@ -62,4 +62,30 @@ namespace bt {
         }
     }
 
+    OrderType Order::type() const {
+        return type_;
+    };
+
+    Side Order::side() const {
+        return side_;
+    }
+
+    std::int64_t Order::quantity() const {
+        return quantity_;
+    }
+
+    double Order::limit_price() const {
+        if (limit_price_ == std::nullopt) {
+            throw std::runtime_error("Requested limit price but order does not have one");
+        }
+        return limit_price_.value();
+    }
+
+    double Order::stop_price() const {
+        if (stop_price_ == std::nullopt) { 
+            throw std::runtime_error("Requested stop price but order does not have one");
+        }
+        return stop_price_.value();
+    }
+
 }

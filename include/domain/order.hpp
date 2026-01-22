@@ -30,6 +30,12 @@ namespace bt {
             static Order StopLimit(Side side, std::int64_t quantity, double limit_price, double stop_price) {
                 return Order(OrderType::StopLimit, side, quantity, limit_price, stop_price);
             }
+
+            OrderType type() const;
+            Side side() const;
+            std::int64_t quantity() const;
+            double limit_price() const;
+            double stop_price() const;
     
         private:
             Order(OrderType type,
