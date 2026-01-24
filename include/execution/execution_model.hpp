@@ -22,5 +22,6 @@ namespace bt {
         const Order &order,
         const Bar &bar );
 
+    
 
 }

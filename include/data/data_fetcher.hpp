@@ -21,15 +21,16 @@ namespace bt {
             void populate_tickers() const;
             void read_bars_from_csv(const std::string& ticker); 
             void load_data_from_csvs();
-            
+            const Bar &get_latest_bar(const std::string &ticker);
+
         private:
             std::string convert_timeframe_to_yf() const;
 
 
             const std::vector<Ticker> &instruments_;
             Timeframe timeframe_;
-            std::unordered_map<std::string, std::vector<Bar>>data;
-            std::unordered_map<std::string, int>cursor;
+            std::unordered_map<std::string, std::vector<Bar>>data_;
+            std::unordered_map<std::string, int>cursor_;
 
     };
 }

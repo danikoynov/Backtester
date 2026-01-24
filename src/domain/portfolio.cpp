@@ -19,6 +19,10 @@ namespace bt {
         }
     }
 
+    Portfolio::Portfolio(double initial_value) 
+        : initial_value_(initial_value) {
+    }
+
     double Portfolio::initial_value() const {
         return initial_value_;
     }
@@ -63,6 +67,10 @@ namespace bt {
 
         cash_ -= price * static_cast<double>(quantity);
         holding_size_.at(symbol) += quantity;
+    }
+
+    void Portfolio::update_cash(double delta) {
+        cash_ += delta;
     }
 
 }

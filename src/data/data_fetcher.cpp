@@ -20,6 +20,9 @@ namespace bt{
         : instruments_(instruments), timeframe_(timeframe) {
         populate_tickers();
         load_data_from_csvs();
+        for (auto instrument : instruments_) {
+            cursor_[instrument.str()] = 0;
+        }
     }   
 
     void DataFetcher::populate_ticker(Ticker ticker) const{
@@ -59,7 +62,7 @@ namespace bt{
 
         std::string line;
         std::getline(file, line); /// Header line
-
+        
         while(std::getline(file, line)) {
             std::vector<std::string> res = split_csv_line(line);
 
@@ -71,7 +74,7 @@ namespace bt{
             std::int64_t volume = parse_int64_t(res[5]);
             
             Bar bar(ts, open, high, low, close, volume);
-            data[ticker].push_back(bar);
+            data_[ticker].push_back(bar);
         }   
     }
 
@@ -80,6 +83,11 @@ namespace bt{
             read_bars_from_csv(ticker.str());
         }
     }
+
+    const Bar &DataFetcher::get_latest_bar(const std::string &ticker) {
+        return data_[ticker][cursor_.at(ticker)];
+    }
+
 
     std::string DataFetcher::convert_timeframe_to_yf() const{
         switch (timeframe_) {
