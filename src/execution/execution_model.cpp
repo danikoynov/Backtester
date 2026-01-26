@@ -14,31 +14,33 @@ is negligable w.r.t. the market)
 namespace bt {
 
     std::optional<Fill> try_fill_market(
-        const Order &order,
-        const Bar &bar) {
+        const Order& order,
+        const Bar& bar,
+        const Ticker& ticker) {
 
         std::int64_t quantity = order.quantity();
         double value = static_cast<double>(quantity) * bar.open();
         
-        return Fill(quantity, value);
+        return Fill(quantity, value, ticker);
     }
 
     std::optional<Fill> try_fill_limit(
-        const Order &order,
-        const Bar &bar) {
+        const Order& order,
+        const Bar& bar,
+        const Ticker& ticker) {
 
         if (order.side() == Side::Buy) {
             if (bar.low() <= order.limit_price()) {
                 std::int64_t quantity = order.quantity();
                 double value = static_cast<double>(quantity) * order.limit_price(); 
-                return Fill(quantity, quantity);
+                return Fill(quantity, quantity, ticker);
             }
         }
         else {
             if (bar.high() >= order.limit_price()) {
                 std::int64_t quantity = order.quantity();
                 double value = static_cast<double>(quantity) * order.limit_price(); 
-                return Fill(quantity, quantity);
+                return Fill(quantity, quantity, ticker);
             }
         }
 
@@ -46,8 +48,9 @@ namespace bt {
     }
 
     std::optional<Order> try_activate_stop(
-        const Order &order,
-        const Bar &bar) {
+        const Order& order,
+        const Bar& bar,
+        const Ticker& ticker) {
         
         if (order.side() == Side::Buy) {
             if (bar.high() >= order.stop_price()) {
@@ -65,8 +68,9 @@ namespace bt {
 
 
     std::optional<Order> try_activate_stop_limit(
-        const Order &order,
-        const Bar &bar) {
+        const Order& order,
+        const Bar& bar,
+        const Ticker& ticker) {
         
         if (order.side() == Side::Buy) {
             if (bar.high() >= order.stop_price()) {
