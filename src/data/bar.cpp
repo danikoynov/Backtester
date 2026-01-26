@@ -1,7 +1,4 @@
 #include <data/bar.hpp>
-#include <chrono>
-
-
 
 namespace bt {
 
@@ -24,6 +21,27 @@ namespace bt {
           close_(close),
           volume_(volume) {
         
+        
+        if (low_ > high_) {
+            throw std::invalid_argument(
+                "Low price must be less than or equal to the high price");
+        }
+
+        if (low_ < 0) {
+            throw std::invalid_argument("Low price must be non-negative");
+        }
+
+        if (open_ < low_ || open_ > high_) {
+            throw std::invalid_argument("Open price must be in the range [low, high]");
+        }
+
+        if (close_ < low_ || close_ > high_) {
+            throw std::invalid_argument("Close price must be in the range [low, high]");
+        }
+        
+        if (volume_ < 0) {
+            throw std::invalid_argument("Volume must be non-negative");
+        }
     }
 
     Timestamp Bar::timestamp() const {

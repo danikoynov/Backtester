@@ -1,5 +1,23 @@
+/*
+Bar
+Purpose:
+    Represents a OHLC (open, high, low, close) bar of
+    a tradable instrument.
+
+Invariants:
+    - low <= open <= high
+    - low <= close <= high
+    - low <= high
+    - 0 <= low
+    - 0 <= volume
+
+Errors:
+    Throws invalid argument if one of the invariants is violated.
+*/
+
 #pragma once
 #include <chrono>
+#include <cstdint>
 
 
 namespace bt {
