@@ -19,9 +19,15 @@ namespace bt {
                 std::function<void(
                     const std::vector<Bar>&, 
                     const Portfolio&,
-                    const OrderBook&,
-                    const Broker&
+                    const std::vector<OrderBook>&,
+                    Broker&
                 )> signal_function
+            );
+            void on_data(
+                const std::vector<Bar>&, 
+                const Portfolio&,
+                const std::vector<OrderBook>&,
+                Broker&
             );
             const std::vector<Ticker> &tickers() const;
             const Timeframe &timeframe() const;
@@ -29,8 +35,8 @@ namespace bt {
             std::function<void(
                 const std::vector<Bar>&, 
                 const Portfolio&,
-                const OrderBook&,
-                const Broker&
+                const std::vector<OrderBook>&,
+                Broker&
             )> signal_function_;
             std::vector<Ticker> tickers_;
             Timeframe timeframe_;
