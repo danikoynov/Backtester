@@ -5,7 +5,7 @@ namespace bt {
         const std::vector<Ticker>& tickers,
         Timeframe timeframe,
         std::function<void(
-            const Bar&, 
+            const std::vector<Bar>&, 
             const Portfolio&,
             const OrderBook&,
             const Broker&

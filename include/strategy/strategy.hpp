@@ -17,7 +17,7 @@ namespace bt {
                 const std::vector<Ticker>& tickers,
                 Timeframe timeframe,
                 std::function<void(
-                    const Bar&, 
+                    const std::vector<Bar>&, 
                     const Portfolio&,
                     const OrderBook&,
                     const Broker&
@@ -27,7 +27,7 @@ namespace bt {
             const Timeframe &timeframe() const;
         private:
             std::function<void(
-                const Bar&, 
+                const std::vector<Bar>&, 
                 const Portfolio&,
                 const OrderBook&,
                 const Broker&
