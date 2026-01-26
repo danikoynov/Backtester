@@ -79,8 +79,15 @@ namespace bt{
     }
 
     void DataFetcher::load_data_from_csvs() {
+        bool loaded_ticker = false;
         for (Ticker ticker: instruments_) {
             read_bars_from_csv(ticker.str());
+
+            if (loaded_ticker && data_[ticker.str()].size() != number_of_bars_) {
+                throw std::runtime_error("Instruments have different amount of bars"); 
+            }
+
+            number_of_bars_ = data_[ticker.str()].size();
         }
     }
 
@@ -93,10 +100,18 @@ namespace bt{
         for (const Ticker& ticker : instruments_) { 
             bars.try_emplace(ticker.str(), next_bar(ticker.str()));
         }
+        global_cursor_ ++;
         return bars;
     }
 
+    std::uint32_t DataFetcher::global_cursor() const {
+        return global_cursor_;
+    }
 
+    std::uint32_t DataFetcher::number_of_bars() const {
+        return number_of_bars_;
+    }
+    
     std::string DataFetcher::convert_timeframe_to_yf() const{
         switch (timeframe_) {
             case Timeframe::Minute1:

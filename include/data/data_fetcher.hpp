@@ -23,15 +23,18 @@ namespace bt {
             void load_data_from_csvs();
             const Bar& next_bar(const std::string &ticker);
             std::unordered_map<std::string, Bar> next_bars();
+            std::uint32_t global_cursor() const;
+            std::uint32_t number_of_bars() const;
 
         private:
             std::string convert_timeframe_to_yf() const;
 
-
+            std::uint32_t number_of_bars_;
             const std::vector<Ticker> &instruments_;
             Timeframe timeframe_;
-            std::unordered_map<std::string, std::vector<Bar>>data_;
-            std::unordered_map<std::string, int>cursor_;
+            std::unordered_map<std::string, std::vector<Bar>> data_;
+            std::unordered_map<std::string, int> cursor_;
+            std::uint32_t global_cursor_;
 
     };
 }
