@@ -84,8 +84,16 @@ namespace bt{
         }
     }
 
-    const Bar &DataFetcher::get_latest_bar(const std::string &ticker) {
+    const Bar& DataFetcher::next_bar(const std::string &ticker) {
         return data_[ticker][cursor_.at(ticker)];
+    }
+    
+    std::unordered_map<std::string, Bar> DataFetcher::next_bars() {
+        std::unordered_map<std::string, Bar> bars;
+        for (const Ticker& ticker : instruments_) { 
+            bars.try_emplace(ticker.str(), next_bar(ticker.str()));
+        }
+        return bars;
     }
 
 
