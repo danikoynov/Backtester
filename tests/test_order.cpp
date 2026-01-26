@@ -27,7 +27,7 @@ TEST(OrderCtor, StopLimitOrderConstructsSuccesfuly) {
 TEST(OrderCtor, NonPositiveQuantityThrows) {
     EXPECT_THROW(Order::Market(Side::Buy, -40), 
         std::invalid_argument);
-}
+} 
 
 /// Test limit price constraints
 

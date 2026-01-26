@@ -13,6 +13,7 @@ add_executable(unit_tests
     test_portfolio.cpp
     test_data_fetcher.cpp
     test_order_book.cpp
+    data/test_bar.cpp
 )
 
 target_link_libraries(unit_tests
