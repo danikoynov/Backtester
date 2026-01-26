@@ -5,6 +5,7 @@ add_library(bt_core
     domain/portfolio.cpp
     data/data_fetcher.cpp
     data/detail.cpp
+    data/bar.cpp
     execution/order_book.cpp
     execution/fill.cpp
     execution/execution_model.cpp

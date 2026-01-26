@@ -1,7 +1,9 @@
 ## Features
 
-    - Add a strategy interface/Class
-    - Add an engine Class
+    - Validation on broker and action!
+    - Add a Visualizer
+    - Add indicators
+
     - Add start and end time for the data_fetcher
 
 ## Small fixes
@@ -19,16 +21,33 @@
 
 ## Testing
 
-    - Add additional tests on Portfolio class
-    - Add tests on Data Fetcher
-    - Add tests on detail
-    - Add tests on Bar class
+    Data:
+    - ~~Add tests on bar.hpp~~
+    - Add tests on data_fetcher.hpp
+    - Add tests on detail.hpp
+
+    Domain:
+    - Add additional tests on portfolio.hpp
+    - Add tests on ticker.hpp
+    - Add tests on timeframe.hpp
+
+    Execution:
+    - Add tests on execution_model.hpp
+    - Add tests on fill.hpp
+    - Add additional tests on order_book.hpp
+
+    Strategy:
+    - Add tests on strategy.hpp
+
+    Engine:
+    - Add tests on action.hpp
+    - Add tests on broker.hpp
+    - Add tests on engine.hpp
 
 ## Documentation
 
     - Add requirements for the python scripts
-    - Add documentation on Portfolio Class
-    - Add documentation on Order Class
+    - Add documentation on components
 
 ## Nice to do
 
@@ -36,6 +55,9 @@
 
 ## Done
 
+    - Action Class
+    - Broker Class
+    - Engine Class
     - Execution logic
     - Fill class
     - OHLC Class
