@@ -8,7 +8,8 @@ namespace bt {
     size_t Broker::actions_count() const {
         return actions_.size();
     }
-    const Action &Broker::get_action() {
+
+    Action Broker::get_action() {
         if (actions_count() == 0) {
             throw std::runtime_error("Action requested from broker but the queue is empty");
         }
@@ -22,8 +23,8 @@ namespace bt {
         actions_.push(Action::InsertOrder(order));
     }
 
-    void Broker::submit_fill(const Fill &fill) {
-        actions_.push(Action::ApplyFill(fill));
+    void Broker::submit_fill(const Fill &fill, const Order &order) {
+        actions_.push(Action::ApplyFill(fill, order));
     }
 
     void Broker::cancel_order(std::uint64_t order_id) {
