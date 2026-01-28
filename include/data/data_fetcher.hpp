@@ -33,8 +33,7 @@ namespace bt {
             const std::vector<Ticker> &instruments_;
             Timeframe timeframe_;
             std::unordered_map<std::string, std::vector<Bar>> data_;
-            std::unordered_map<std::string, int> cursor_;
-            std::uint32_t global_cursor_;
+            std::uint32_t global_cursor_ = 0;
 
     };
 }

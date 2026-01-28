@@ -24,8 +24,8 @@
 Data:
 
 - ~~Add tests on bar.hpp~~
-- Add tests on data_fetcher.hpp
-- Add tests on detail.hpp
+- ~~Add tests on data_fetcher.hpp~~
+- ~~Add tests on detail.hpp~~
 
 Domain:
 
