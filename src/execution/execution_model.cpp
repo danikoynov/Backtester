@@ -33,14 +33,14 @@ namespace bt {
             if (bar.low() <= order.limit_price()) {
                 std::int64_t quantity = order.quantity();
                 double value = static_cast<double>(quantity) * order.limit_price(); 
-                return Fill(quantity, quantity, ticker);
+                return Fill(quantity, value, ticker);
             }
         }
         else {
             if (bar.high() >= order.limit_price()) {
                 std::int64_t quantity = order.quantity();
                 double value = static_cast<double>(quantity) * order.limit_price(); 
-                return Fill(quantity, quantity, ticker);
+                return Fill(quantity, value, ticker);
             }
         }
 

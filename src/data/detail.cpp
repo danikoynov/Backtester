@@ -1,3 +1,50 @@
+/*
+split_csv_line
+Purpose:
+    Split a line on ',' into fields (no quoting/escaping support).
+
+Invariants:
+    - Returns at least one field (possibly empty).
+*/
+
+/*
+parse_double
+Purpose:
+    Parse a base-10 double from a string_view (must consume entire input).
+
+Errors:
+    Throws std::invalid_argument on empty input or invalid/partial parse.
+*/
+
+/*
+parse_int64_t
+Purpose:
+    Parse a base-10 int64_t from a string_view (must consume entire input).
+
+Errors:
+    Throws std::invalid_argument on empty input, invalid parse, or overflow.
+*/
+
+/*
+parse_int
+Purpose:
+    Parse a base-10 int from a string_view (must consume entire input).
+
+Errors:
+    Throws std::invalid_argument on empty input, invalid parse, or overflow.
+*/
+
+/*
+parse_timestamp_seconds
+Purpose:
+    Parse "YYYY-MM-DD HH:MM:SS±HH:MM" into Timestamp (seconds precision).
+    Offset is format-checked but not applied.
+
+Errors:
+    Throws std::invalid_argument on format/parse/range errors.
+*/
+
+
 #include "data/detail.hpp"
 #include <charconv>
 #include <string>
@@ -8,8 +55,9 @@ namespace bt {
      
     std::vector<std::string> split_csv_line(const std::string &line) {
         std::vector<std::string> out;
-        int last_comma = -1, line_size = line.size();
-        for (int i = 0; i < line_size; i ++) {
+        size_t last_comma = -1;
+        size_t line_size = line.size();
+        for (size_t i = 0; i < line_size; i ++) {
             if (line[i] == ',')
             {
                 out.push_back(line.substr(last_comma + 1, i - last_comma - 1));

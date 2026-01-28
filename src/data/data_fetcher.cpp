@@ -87,7 +87,7 @@ namespace bt{
                 throw std::runtime_error("Instruments have different amount of bars"); 
             }
 
-            number_of_bars_ = data_[ticker.str()].size();
+            number_of_bars_ = static_cast<std::uint32_t>(data_[ticker.str()].size());
         }
     }
 

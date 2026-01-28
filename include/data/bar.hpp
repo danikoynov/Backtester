@@ -1,8 +1,7 @@
 /*
 Bar
 Purpose:
-    Represents a OHLC (open, high, low, close) bar of
-    a tradable instrument.
+    Represents a OHLC (open, high, low, close) bar of a tradable instrument.
 
 Invariants:
     - low <= open <= high
