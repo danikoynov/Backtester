@@ -167,6 +167,30 @@ namespace bt {
             double stop_price() const;
     
         private:
+
+            /*
+            Order::Order
+            Purpose:
+                Construct an Order with explicit type, side, quantity and optional prices.
+
+            Invariants:
+                - 0 < quantity
+                - If type is Market:
+                    - limit_price is nullopt
+                    - stop_price  is nullopt
+                - If type is Limit:
+                    - limit_price has a value and 0 < limit_price
+                    - stop_price  is nullopt
+                - If type is Stop:
+                    - limit_price is nullopt
+                    - stop_price  has a value and 0 < stop_price
+                - If type is StopLimit:
+                    - limit_price has a value and 0 < limit_price
+                    - stop_price  has a value and 0 < stop_price
+
+            Errors:
+                Throws std::invalid_argument if any invariant is violated.
+            */
             Order(OrderType type,
                   Side side,
                   std::int64_t quantity,
