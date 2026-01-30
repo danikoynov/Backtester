@@ -6,7 +6,6 @@ Purpose:
 Invariants:
     - low <= open <= high
     - low <= close <= high
-    - low <= high
     - 0 <= low
     - 0 <= volume
 
@@ -28,6 +27,15 @@ namespace bt {
 
     class Bar {
         public:
+        
+            /*
+            Bar::Bar
+            Purpose:
+                Construct a bar given a timestamp, OHLC and volume fields.
+
+            Errors:
+                Throws std::invalid_argument if any invariant is violated.
+            */
             Bar(
                 Timestamp timestamp, 
                 double open,
@@ -37,11 +45,67 @@ namespace bt {
                 std::int64_t volume
             );
 
+            /*
+            timestamp
+            Purpose:
+                Returns the bar's timestamp.
+            
+            Invariants:
+             - Returned timestamp corresponds to the open time of the bar.
+            
+             Errors:
+                Does not throw.
+            */
             Timestamp timestamp() const;
+
+            /*
+            open
+            Purpose:
+                Returns bar's open price.
+            
+            Errors:
+                Does not throw.
+            */
             double open() const;
+
+            /*
+            high
+            Purpose:
+                Returns bar's high price.
+            
+            Errors:
+                Does not throw.
+            */
             double high() const;
+
+            /*
+            low
+            Purpose:
+                Returns bar's low price.
+            
+            Errors:
+                Does not throw.
+            */
             double low() const;
+
+            /*
+            close
+            Purpose:
+                Returns bar's close price.
+            
+            Errors:
+                Does not throw.
+            */
             double close() const;
+
+            /*
+            volume
+            Purpose:
+                Returns bar's volume.
+            
+            Errors:
+                Does not throw.
+            */
             std::int64_t volume() const;
 
         private:
