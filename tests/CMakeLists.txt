@@ -9,9 +9,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(unit_tests
-    test_order.cpp
+    domain/test_order.cpp
     test_portfolio.cpp
-    test_data_fetcher.cpp
     test_order_book.cpp
     data/test_bar.cpp
     data/test_detail.cpp
