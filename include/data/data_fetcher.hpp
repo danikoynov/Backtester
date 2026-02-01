@@ -1,19 +1,3 @@
-/*
-DataFetcher
-Purpose:
-    Fetch OHLCV data for a set of tickers using a Python yfinance script,
-    load CSVs into memory, and serve bars sequentially via a global cursor.
-
-Invariants:
-    - instruments_ is stored by reference and must outlive the DataFetcher.
-    - number_of_bars_ equals the bar count per ticker (all tickers must match).
-    - global_cursor_ is the current index used for all tickers.
-
-Errors:
-    Throws std::runtime_error on script/file/consistency/range failures.
-    Propagates std::invalid_argument from parsing helpers and Bar.
-*/
-
 #pragma once
 #include <vector>
 #include <string>
@@ -27,6 +11,21 @@ namespace bt {
     static const std::string script_path = "scripts/fetch_yf.py";
     static const std::string data_path = "data";
 
+    /*
+    DataFetcher
+    Purpose:
+        Fetch OHLCV data for a set of tickers using a Python yfinance script,
+        load CSVs into memory, and serve bars sequentially via a global cursor.
+
+    Invariants:
+        - instruments_ is stored by reference and must outlive the DataFetcher.
+        - number_of_bars_ equals the bar count per ticker (all tickers must match).
+        - global_cursor_ is the current index used for all tickers.
+
+    Errors:
+        Throws std::runtime_error on script/file/consistency/range failures.
+        Propagates std::invalid_argument from parsing helpers and Bar.
+    */
     class DataFetcher { 
         public:
             

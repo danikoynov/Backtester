@@ -1,23 +1,3 @@
-/*
-Order
-Purpose:
-    Represents a market, limit, stop or stop limit order.
-
-Invariants:
-    - limit_price has a value only if type is Limit or StopLimit,
-    otherwise it is nullopt.
-    - stop_price has a value only if type is Stop or StopLimit,
-    otherswise it is nullopt. 
-    - 0 < quantity
-    - 0 < limit_price
-    - 0 < stop_price
-
-Errors:
-    Throws std::invalid_argument if any of the invariants is violated.
-    Throws std::runtime_error if limit_price is accessed but does not exist.
-    Throws std::runtime_error if stop_price is accessed but does not exist.
-*/
-
 #pragma once
 #include <optional>
 #include <cstdint>
@@ -36,10 +16,28 @@ namespace bt {
         Sell
     };
 
+    /*
+    Order
+    Purpose:
+        Represents a market, limit, stop or stop limit order.
+
+    Invariants:
+        - limit_price has a value only if type is Limit or StopLimit,
+        otherwise it is nullopt.
+        - stop_price has a value only if type is Stop or StopLimit,
+        otherswise it is nullopt. 
+        - 0 < quantity
+        - 0 < limit_price
+        - 0 < stop_price
+
+    Errors:
+        Throws std::invalid_argument if any of the invariants is violated.
+        Throws std::runtime_error if limit_price is accessed but does not exist.
+        Throws std::runtime_error if stop_price is accessed but does not exist.
+    */
     class Order {
         public:
 
- 
             /*
             Market
             Purpose:
