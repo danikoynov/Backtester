@@ -9,6 +9,7 @@ add_library(bt_core
     execution/order_book.cpp
     execution/fill.cpp
     execution/execution_model.cpp
+    engine/action.cpp
 )
 
 # Every time some file uses the library,

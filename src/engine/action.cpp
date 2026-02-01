@@ -50,9 +50,6 @@ namespace bt {
     };
 
     const ActionType &Action::action_type() const {
-        if (!action_type_) [[unlikely]] {
-            throw std::runtime_error("Accessed action does not contain action_type.");
-        }
         return action_type_;
     }
 
