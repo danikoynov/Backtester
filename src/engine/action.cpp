@@ -1,4 +1,5 @@
 #include "engine/action.hpp"
+#include <stdexcept>
 
 namespace bt {
 
@@ -49,18 +50,30 @@ namespace bt {
     };
 
     const ActionType &Action::action_type() const {
+        if (!action_type_) [[unlikely]] {
+            throw std::runtime_error("Accessed action does not contain action_type.");
+        }
         return action_type_;
     }
 
     const Order &Action::order() const {
+        if (!order_) [[unlikely]] {
+            throw std::runtime_error("Accessed action does not contain order.");
+        }
         return order_.value();
     }
 
     const Fill &Action::fill() const {
+        if (!fill_) [[unlikely]] {
+            throw std::runtime_error("Accessed action does not contain fill.");
+        }
         return fill_.value();
     }
 
     std::uint64_t Action::order_id() const {
+        if (!order_id_) [[unlikely]] {
+            throw std::runtime_error("Accessed action does not contain order_id.");
+        }
         return order_id_.value();
     }
 }
