@@ -10,6 +10,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(unit_tests
     domain/test_order.cpp
+    engine/test_action.cpp
     test_portfolio.cpp
     test_order_book.cpp
     data/test_bar.cpp
