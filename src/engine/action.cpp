@@ -12,7 +12,40 @@ namespace bt {
           order_(order),
           fill_(fill),
           order_id_(order_id) {
-    
+        switch (action_type_) {
+
+            case ActionType::InsertOrder:
+                if (!order_ || fill_ || order_id_) {
+                    throw std::invalid_argument(
+                        "InsertOrder requires order only"
+                    );
+                }
+                break;
+
+            case ActionType::CancelOrder:
+                if (!order_id_ || order_ || fill_) {
+                    throw std::invalid_argument(
+                        "CancelOrder requires order_id only"
+                    );
+                }
+                break;
+
+            case ActionType::ExecuteOrder:
+                if (!order_id_ || order_ || fill_) {
+                    throw std::invalid_argument(
+                        "ExecuteOrder requires order_id only"
+                    );
+                }
+                break;
+
+            case ActionType::ApplyFill:
+                if (!order_ || !fill_ || order_id_) {
+                    throw std::invalid_argument(
+                        "ApplyFill requires order and fill"
+                    );
+                }
+                break;
+        }
     };
 
     const ActionType &Action::action_type() const {
