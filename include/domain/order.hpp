@@ -22,13 +22,19 @@ namespace bt {
         Represents a market, limit, stop or stop limit order.
 
     Invariants:
-        - limit_price has a value only if type is Limit or StopLimit,
-        otherwise it is nullopt.
-        - stop_price has a value only if type is Stop or StopLimit,
-        otherswise it is nullopt. 
         - 0 < quantity
-        - 0 < limit_price
-        - 0 < stop_price
+        - If type is Market:
+            - limit_price is nullopt
+            - stop_price  is nullopt
+        - If type is Limit:
+            - limit_price has a value and 0 < limit_price
+            - stop_price  is nullopt
+        - If type is Stop:
+            - limit_price is nullopt
+            - stop_price  has a value and 0 < stop_price
+        - If type is StopLimit:
+            - limit_price has a value and 0 < limit_price
+            - stop_price  has a value and 0 < stop_price
 
     Errors:
         Throws std::invalid_argument if any of the invariants is violated.
@@ -171,20 +177,8 @@ namespace bt {
             Purpose:
                 Construct an Order with explicit type, side, quantity and optional prices.
 
-            Invariants:
-                - 0 < quantity
-                - If type is Market:
-                    - limit_price is nullopt
-                    - stop_price  is nullopt
-                - If type is Limit:
-                    - limit_price has a value and 0 < limit_price
-                    - stop_price  is nullopt
-                - If type is Stop:
-                    - limit_price is nullopt
-                    - stop_price  has a value and 0 < stop_price
-                - If type is StopLimit:
-                    - limit_price has a value and 0 < limit_price
-                    - stop_price  has a value and 0 < stop_price
+            Note*:
+                Invariants of the class must be met.
 
             Errors:
                 Throws std::invalid_argument if any invariant is violated.
