@@ -10,6 +10,7 @@ add_library(bt_core
     execution/fill.cpp
     execution/execution_model.cpp
     engine/action.cpp
+    engine/broker.cpp
 )
 
 # Every time some file uses the library,
