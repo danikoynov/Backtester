@@ -20,6 +20,7 @@ add_executable(unit_tests
     data/test_bar.cpp
     data/test_detail.cpp
     data/test_data_fetcher.cpp
+    strategy/test_strategy.cpp
 )
 
 target_link_libraries(unit_tests

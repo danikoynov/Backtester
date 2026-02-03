@@ -29,30 +29,29 @@ Data:
 
 Domain:
 
-- Add additional tests on portfolio.hpp
-- Add tests on ticker.hpp
-- Add tests on timeframe.hpp
+- ~~Add additional tests on portfolio.hpp~~
+- ~~Add tests on ticker.hpp~~
 
 Execution:
 
-- Add tests on execution_model.hpp
-- Add tests on fill.hpp
-- Add additional tests on order_book.hpp
+- ~~Add tests on execution_model.hpp~~
+- ~~Add tests on fill.hpp~~
+- ~~Add tests on order_book.hpp~~
 
 Strategy:
 
-- Add tests on strategy.hpp
+- ~~Add tests on strategy.hpp~~
 
 Engine:
 
-- Add tests on action.hpp
-- Add tests on broker.hpp
+- ~~Add tests on action.hpp~~
+- ~~Add tests on broker.hpp~~
 - Add tests on engine.hpp
 
 ## Documentation
 
 - Add requirements for the python scripts
-- Add documentation on components
+- ~~Add documentation on components~~
 
 ## Nice to do
 
