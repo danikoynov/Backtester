@@ -17,25 +17,25 @@ namespace bt {
                 const std::vector<Ticker>& tickers,
                 Timeframe timeframe,
                 std::function<void(
-                    const std::vector<Bar>&, 
+                    const std::unordered_map<std::string, Bar>&, 
                     const Portfolio&,
-                    const std::vector<OrderBook>&,
+                    const std::unordered_map<std::string, OrderBook>&,
                     Broker&
                 )> signal_function
             );
             void on_data(
-                const std::vector<Bar>&, 
+                const std::unordered_map<std::string, Bar>&, 
                 const Portfolio&,
-                const std::vector<OrderBook>&,
+                const std::unordered_map<std::string, OrderBook>&,
                 Broker&
             );
             const std::vector<Ticker> &tickers() const;
             const Timeframe &timeframe() const;
         private:
             std::function<void(
-                const std::vector<Bar>&, 
+                const std::unordered_map<std::string, Bar>&, 
                 const Portfolio&,
-                const std::vector<OrderBook>&,
+                const std::unordered_map<std::string, OrderBook>&,
                 Broker&
             )> signal_function_;
             std::vector<Ticker> tickers_;

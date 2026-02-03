@@ -5,9 +5,9 @@ namespace bt {
         const std::vector<Ticker>& tickers,
         Timeframe timeframe,
         std::function<void(
-            const std::vector<Bar>&, 
+            const std::unordered_map<std::string, Bar>&, 
             const Portfolio&,
-            const std::vector<OrderBook>&,
+            const std::unordered_map<std::string, OrderBook>&,
             Broker&
         )> signal_function)
         : tickers_(tickers),
@@ -24,9 +24,9 @@ namespace bt {
     }
 
     void Strategy::on_data(
-        const std::vector<Bar>& bars, 
+        const std::unordered_map<std::string, Bar>& bars, 
         const Portfolio& portfolio,
-        const std::vector<OrderBook>& order_books,
+        const std::unordered_map<std::string, OrderBook>& order_books,
         Broker& broker
     ) {
         signal_function_(
