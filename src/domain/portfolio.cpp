@@ -59,6 +59,16 @@ namespace bt {
         }
     }
 
+    void Portfolio::set_initial_prices(const std::unordered_map<std::string, double> &latest_prices) {
+        for (auto it = latest_prices.begin(); it != latest_prices.end(); ++it) { 
+            if (it -> second < 0) {
+                throw std::invalid_argument("Latest price should be non-negative");
+            }
+            instrument_price_.try_emplace(it -> first, it -> second);
+            holding_size_.try_emplace(it -> first, 0);
+        }
+    }
+
     void Portfolio::update_position(const std::string &symbol, std::int64_t quantity) {
         double price = instrument_price_.at(symbol);
         

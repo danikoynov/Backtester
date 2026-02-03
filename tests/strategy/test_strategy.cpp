@@ -1,3 +1,4 @@
+// tests/strategy/test_strategy.cpp
 #include <gtest/gtest.h>
 
 #include <unordered_map>
@@ -107,10 +108,12 @@ TEST(StrategyTest, SignalFunctionCanQueueOrdersAndActionsOnBroker) {
            const Portfolio&,
            const std::unordered_map<std::string, OrderBook>&,
            Broker& br) {
-            br.submit_order(Order::Market(Side::Buy, 10));
-            br.submit_order(Order::Limit(Side::Sell, 5, 101.25));
-            br.cancel_order(42);
-            br.execute_order(7);
+            const Ticker t("AAPL");
+
+            br.submit_order(Order::Market(Side::Buy, 10), t);
+            br.submit_order(Order::Limit(Side::Sell, 5, 101.25), t);
+            br.cancel_order(42, t);
+            br.execute_order(7, t);
         }
     );
 

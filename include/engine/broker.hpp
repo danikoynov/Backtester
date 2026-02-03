@@ -1,6 +1,6 @@
 #pragma once
 #include "engine/action.hpp"
-
+#include "domain/ticker.hpp"
 #include <queue>
 
 namespace bt {
@@ -43,7 +43,7 @@ namespace bt {
             Errors:
                 Throws std::runtime_error if the broker contains no actions.
             */
-            Action get_action();
+            std::pair<Ticker, Action> get_action();
 
             /*
             submit_order
@@ -56,7 +56,7 @@ namespace bt {
             Errors:
                 Propagates any exception thrown by Action::InsertOrder.
             */
-            void submit_order(const Order& order);
+            void submit_order(const Order& order, const Ticker& ticker);
 
             /*
             cancel_order
@@ -69,7 +69,7 @@ namespace bt {
             Errors:
                 Propagates any exception thrown by Action::CancelOrder.
             */
-            void cancel_order(std::uint64_t order_id);
+            void cancel_order(std::uint64_t order_id, const Ticker& ticker);
 
             /*
             execute_order
@@ -82,7 +82,7 @@ namespace bt {
             Errors:
                 Propagates any exception thrown by Action::ExecuteOrder.
             */
-            void execute_order(std::uint64_t order_id);
+            void execute_order(std::uint64_t order_id, const Ticker& ticker);
 
             /*
             submit_fill
@@ -95,9 +95,9 @@ namespace bt {
             Errors:
                 Propagates any exception thrown by Action::ApplyFill.
             */
-            void submit_fill(const Fill& fill, const Order& order);
+            void submit_fill(const Fill& fill, const Order& order, const Ticker& ticker);
 
         private:
-            std::queue<Action> actions_;
+            std::queue<std::pair<Ticker, Action>> actions_;
     };
 }

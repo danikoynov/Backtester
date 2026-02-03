@@ -9,30 +9,30 @@ namespace bt {
         return actions_.size();
     }
 
-    Action Broker::get_action() {
+    std::pair<Ticker, Action> Broker::get_action() {
         if (actions_count() == 0) {
             throw std::runtime_error("Action requested from broker but the queue is empty");
         }
-
-        Action next_action = actions_.front();
+    
+        std::pair<Ticker, Action> next_action = actions_.front();
         actions_.pop();
         return next_action;
     }
 
-    void Broker::submit_order(const Order &order) {
-        actions_.push(Action::InsertOrder(order));
+    void Broker::submit_order(const Order &order, const Ticker& ticker) {
+        actions_.push({ticker, Action::InsertOrder(order)});
     }
 
-    void Broker::submit_fill(const Fill &fill, const Order &order) {
-        actions_.push(Action::ApplyFill(fill, order));
+    void Broker::submit_fill(const Fill &fill, const Order &order, const Ticker& ticker) {
+        actions_.push({ticker, Action::ApplyFill(fill, order)});
     }
 
-    void Broker::cancel_order(std::uint64_t order_id) {
-        actions_.push(Action::CancelOrder(order_id));
+    void Broker::cancel_order(std::uint64_t order_id, const Ticker& ticker) {
+        actions_.push({ticker, Action::CancelOrder(order_id)});
     }
 
-    void Broker::execute_order(std::uint64_t order_id) {
-        actions_.push(Action::ExecuteOrder(order_id));
+    void Broker::execute_order(std::uint64_t order_id, const Ticker& ticker) {
+        actions_.push({ticker, Action::ExecuteOrder(order_id)});
     }
 
     

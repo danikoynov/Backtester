@@ -11,6 +11,7 @@ add_library(bt_core
     execution/execution_model.cpp
     engine/action.cpp
     engine/broker.cpp
+    engine/engine.cpp
     strategy/strategy.cpp
 )
 

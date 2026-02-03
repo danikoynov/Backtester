@@ -17,6 +17,7 @@ add_executable(unit_tests
     domain/test_ticker.cpp
     engine/test_action.cpp
     engine/test_broker.cpp
+    engine/test_engine.cpp
     data/test_bar.cpp
     data/test_detail.cpp
     data/test_data_fetcher.cpp

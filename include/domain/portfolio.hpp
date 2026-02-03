@@ -15,6 +15,7 @@ namespace bt {
             double pnl() const;
             void update_price(const std::string &symbol, double latest_price);
             void update_prices(const std::unordered_map<std::string, double> &latest_prices);
+            void set_initial_prices(const std::unordered_map<std::string, double> &latest_prices);
             void update_position(const std::string &symbol, int64_t quantity);
             void update_cash(double delta);
 

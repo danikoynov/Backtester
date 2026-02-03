@@ -1,148 +1,201 @@
+// tests/test_broker.cpp
 #include <gtest/gtest.h>
 
 #include <cstdint>
 #include <stdexcept>
 
 #include "engine/broker.hpp"
+#include "engine/action.hpp"
+#include "domain/ticker.hpp"
 #include "domain/order.hpp"
 #include "execution/fill.hpp"
-#include "domain/ticker.hpp"
 
-using namespace bt;
+namespace bt {
 
-namespace {
 
-Ticker make_ticker() {
-    // Adjust if your Ticker API differs
-    return Ticker{"TEST"};
-}
-
-Order make_order_buy(std::int64_t qty = 10) {
-    return Order::Market(Side::Buy, qty);
-}
-
-Order make_order_sell(std::int64_t qty = 10) {
-    return Order::Market(Side::Sell, qty);
-}
-
-Fill make_fill(std::int64_t qty = 5, double value = 100.0) {
-    return Fill(qty, value, make_ticker());
-}
-
-} // namespace
-
-TEST(Broker_Basics, StartsEmpty) {
+TEST(BrokerTests, ActionsCountInitiallyZero) {
     Broker b;
     EXPECT_EQ(b.actions_count(), 0u);
-    EXPECT_THROW(b.get_action(), std::runtime_error);
 }
 
-TEST(Broker_SubmitOrder, EnqueuesInsertOrder) {
+TEST(BrokerTests, GetActionOnEmptyThrows) {
     Broker b;
-    Order o = make_order_buy(10);
+    EXPECT_THROW((void)b.get_action(), std::runtime_error);
+}
 
-    b.submit_order(o);
+TEST(BrokerTests, SubmitOrderPushesOneActionWithTicker) {
+    Broker b;
+    Ticker t("AAPL");
+
+    Order o = Order::Market(Side::Buy, 10);
+    b.submit_order(o, t);
 
     EXPECT_EQ(b.actions_count(), 1u);
 
-    Action a = b.get_action();
-    EXPECT_EQ(a.action_type(), ActionType::InsertOrder);
-    EXPECT_NO_THROW(a.order());
-    EXPECT_THROW(a.fill(), std::runtime_error);
-    EXPECT_THROW(a.order_id(), std::runtime_error);
-
+    auto [ticker, action] = b.get_action();
     EXPECT_EQ(b.actions_count(), 0u);
+
+    EXPECT_EQ(ticker.str(), "AAPL");
+
+    EXPECT_EQ(action.action_type(), ActionType::InsertOrder);
+    EXPECT_EQ(action.order().type(), OrderType::Market);
+    EXPECT_EQ(action.order().side(), Side::Buy);
+    EXPECT_EQ(action.order().quantity(), 10);
+
+    // market order must not have prices; accessing should throw
+    EXPECT_THROW((void)action.order().limit_price(), std::runtime_error);
+    EXPECT_THROW((void)action.order().stop_price(), std::runtime_error);
 }
 
-TEST(Broker_CancelOrder, EnqueuesCancelOrder) {
+TEST(BrokerTests, SubmitLimitOrderKeepsLimitPrice) {
     Broker b;
+    Ticker t("AAPL");
 
-    b.cancel_order(42);
+    Order o = Order::Limit(Side::Sell, 2, 123.0);
+    b.submit_order(o, t);
 
+    auto [ticker, action] = b.get_action();
+    EXPECT_EQ(ticker.str(), "AAPL");
+
+    EXPECT_EQ(action.action_type(), ActionType::InsertOrder);
+    EXPECT_EQ(action.order().type(), OrderType::Limit);
+    EXPECT_EQ(action.order().side(), Side::Sell);
+    EXPECT_EQ(action.order().quantity(), 2);
+
+    EXPECT_DOUBLE_EQ(action.order().limit_price(), 123.0);
+    EXPECT_THROW((void)action.order().stop_price(), std::runtime_error);
+}
+
+// -----------------------------
+// Cancel / Execute carry order_id
+// -----------------------------
+TEST(BrokerTests, CancelOrderPushesCancelActionWithTickerAndId) {
+    Broker b;
+    Ticker t("MSFT");
+    std::uint64_t id = 42;
+
+    b.cancel_order(id, t);
     EXPECT_EQ(b.actions_count(), 1u);
 
-    Action a = b.get_action();
-    EXPECT_EQ(a.action_type(), ActionType::CancelOrder);
-    EXPECT_EQ(a.order_id(), 42u);
-    EXPECT_THROW(a.order(), std::runtime_error);
-    EXPECT_THROW(a.fill(), std::runtime_error);
+    auto [ticker, action] = b.get_action();
+    EXPECT_EQ(ticker.str(), "MSFT");
 
-    EXPECT_EQ(b.actions_count(), 0u);
+    EXPECT_EQ(action.action_type(), ActionType::CancelOrder);
+    EXPECT_EQ(action.order_id(), id);
 }
 
-TEST(Broker_ExecuteOrder, EnqueuesExecuteOrder) {
+TEST(BrokerTests, ExecuteOrderPushesExecuteActionWithTickerAndId) {
     Broker b;
+    Ticker t("NVDA");
+    std::uint64_t id = 7;
 
-    b.execute_order(7);
-
+    b.execute_order(id, t);
     EXPECT_EQ(b.actions_count(), 1u);
 
-    Action a = b.get_action();
-    EXPECT_EQ(a.action_type(), ActionType::ExecuteOrder);
-    EXPECT_EQ(a.order_id(), 7u);
-    EXPECT_THROW(a.order(), std::runtime_error);
-    EXPECT_THROW(a.fill(), std::runtime_error);
+    auto [ticker, action] = b.get_action();
+    EXPECT_EQ(ticker.str(), "NVDA");
 
-    EXPECT_EQ(b.actions_count(), 0u);
+    EXPECT_EQ(action.action_type(), ActionType::ExecuteOrder);
+    EXPECT_EQ(action.order_id(), id);
 }
 
-TEST(Broker_SubmitFill, EnqueuesApplyFill) {
+
+TEST(BrokerTests, SubmitFillPushesApplyFillActionWithTicker) {
     Broker b;
-    Order o = make_order_sell(3);
-    Fill f = make_fill(3, 250.0);
+    Ticker t("TSLA");
 
-    b.submit_fill(f, o);
+    Order o = Order::Market(Side::Buy, 5);
+    Fill f(/*quantity=*/5, /*value=*/500.0, t);
 
+    b.submit_fill(f, o, t);
     EXPECT_EQ(b.actions_count(), 1u);
 
-    Action a = b.get_action();
-    EXPECT_EQ(a.action_type(), ActionType::ApplyFill);
-    EXPECT_NO_THROW(a.order());
-    EXPECT_NO_THROW(a.fill());
-    EXPECT_THROW(a.order_id(), std::runtime_error);
+    auto [ticker, action] = b.get_action();
+    EXPECT_EQ(ticker.str(), "TSLA");
 
-    EXPECT_EQ(a.fill().quantity(), f.quantity());
-    EXPECT_EQ(a.fill().value(), f.value());
+    EXPECT_EQ(action.action_type(), ActionType::ApplyFill);
+
+    EXPECT_EQ(action.fill().quantity(), 5);
+    EXPECT_DOUBLE_EQ(action.fill().value(), 500.0);
+    EXPECT_EQ(action.fill().ticker().str(), "TSLA");
+
+    EXPECT_EQ(action.order().type(), OrderType::Market);
+    EXPECT_EQ(action.order().side(), Side::Buy);
+    EXPECT_EQ(action.order().quantity(), 5);
+    EXPECT_THROW((void)action.order().limit_price(), std::runtime_error);
+    EXPECT_THROW((void)action.order().stop_price(), std::runtime_error);
+}
+
+
+TEST(BrokerTests, FIFOOrderAcrossDifferentTickersIsPreserved) {
+    Broker b;
+
+    Ticker a("AAPL");
+    Ticker m("MSFT");
+    Ticker n("NVDA");
+
+    Order o1 = Order::Market(Side::Buy, 1);
+    Order o2 = Order::Limit(Side::Sell, 2, 123.0);
+
+    b.submit_order(o1, a);     
+    b.cancel_order(10, m);     
+    b.execute_order(11, n);    
+    b.submit_order(o2, a);     
+
+    ASSERT_EQ(b.actions_count(), 4u);
+
+    {
+        auto [ticker, action] = b.get_action();
+        EXPECT_EQ(ticker.str(), "AAPL");
+        EXPECT_EQ(action.action_type(), ActionType::InsertOrder);
+        EXPECT_EQ(action.order().type(), OrderType::Market);
+        EXPECT_EQ(action.order().quantity(), 1);
+    }
+    {
+        auto [ticker, action] = b.get_action();
+        EXPECT_EQ(ticker.str(), "MSFT");
+        EXPECT_EQ(action.action_type(), ActionType::CancelOrder);
+        EXPECT_EQ(action.order_id(), 10u);
+    }
+    {
+        auto [ticker, action] = b.get_action();
+        EXPECT_EQ(ticker.str(), "NVDA");
+        EXPECT_EQ(action.action_type(), ActionType::ExecuteOrder);
+        EXPECT_EQ(action.order_id(), 11u);
+    }
+    {
+        auto [ticker, action] = b.get_action();
+        EXPECT_EQ(ticker.str(), "AAPL");
+        EXPECT_EQ(action.action_type(), ActionType::InsertOrder);
+
+        EXPECT_EQ(action.order().type(), OrderType::Limit);
+        EXPECT_EQ(action.order().side(), Side::Sell);
+        EXPECT_EQ(action.order().quantity(), 2);
+        EXPECT_DOUBLE_EQ(action.order().limit_price(), 123.0);
+        EXPECT_THROW((void)action.order().stop_price(), std::runtime_error);
+    }
 
     EXPECT_EQ(b.actions_count(), 0u);
 }
 
-TEST(Broker_FIFO, ReturnsActionsInSubmissionOrder) {
+TEST(BrokerTests, ActionsCountDecrementsAsActionsArePopped) {
     Broker b;
+    Ticker t("AAPL");
 
-    Order o1 = make_order_buy(10);
-    Order o2 = make_order_sell(20);
-    Fill f  = make_fill(5, 100.0);
+    b.submit_order(Order::Market(Side::Buy, 1), t);
+    b.cancel_order(1, t);
+    b.execute_order(2, t);
 
-    b.submit_order(o1);          // 1
-    b.cancel_order(111);         // 2
-    b.execute_order(222);        // 3
-    b.submit_fill(f, o2);        // 4
+    EXPECT_EQ(b.actions_count(), 3u);
 
-    EXPECT_EQ(b.actions_count(), 4u);
+    (void)b.get_action();
+    EXPECT_EQ(b.actions_count(), 2u);
 
-    {
-        Action a = b.get_action();
-        EXPECT_EQ(a.action_type(), ActionType::InsertOrder);
-        EXPECT_NO_THROW(a.order());
-    }
-    {
-        Action a = b.get_action();
-        EXPECT_EQ(a.action_type(), ActionType::CancelOrder);
-        EXPECT_EQ(a.order_id(), 111u);
-    }
-    {
-        Action a = b.get_action();
-        EXPECT_EQ(a.action_type(), ActionType::ExecuteOrder);
-        EXPECT_EQ(a.order_id(), 222u);
-    }
-    {
-        Action a = b.get_action();
-        EXPECT_EQ(a.action_type(), ActionType::ApplyFill);
-        EXPECT_NO_THROW(a.order());
-        EXPECT_NO_THROW(a.fill());
-    }
+    (void)b.get_action();
+    EXPECT_EQ(b.actions_count(), 1u);
 
+    (void)b.get_action();
     EXPECT_EQ(b.actions_count(), 0u);
-    EXPECT_THROW(b.get_action(), std::runtime_error);
+}
+
 }

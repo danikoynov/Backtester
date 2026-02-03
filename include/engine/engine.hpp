@@ -14,7 +14,7 @@ namespace bt {
         public:
             explicit Engine(const Strategy& strategy, double initial_value);
             void process_bar();
-            void apply_action(const Action& action);
+            void apply_action(const Action& action, const Ticker& ticker);
             void apply_actions();
             void check_order_execution(const std::unordered_map<std::string, Bar>& bars);
             void backtest();

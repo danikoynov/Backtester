@@ -58,7 +58,7 @@ namespace bt{
 
     void DataFetcher::read_bars_from_csv(const std::string& ticker) {
 
-        std::string file_path = data_path + "/" + ticker + "/" + convert_timeframe_to_yf();
+        std::string file_path = data_path + "/" + ticker + "/" + convert_timeframe_to_yf() + ".csv";
         std::ifstream file(file_path);
 
         if (!file.is_open())

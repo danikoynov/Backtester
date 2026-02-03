@@ -30,17 +30,17 @@ static void expect_bar(const bt::Bar& b, const std::string& ts,
 
 static void write_text(const fs::path& p, const std::string& s) {
     fs::create_directories(p.parent_path());
-    std::ofstream out(p, std::ios::trunc);
+    std::ofstream out(p, std::ios::trunc | std::ios::binary);
     ASSERT_TRUE(out.is_open()) << "Cannot write: " << p.string();
     out << s;
 }
 
-static void write_csv_no_ext(const std::string& ticker, const std::string& tf,
-                             const std::string& body_lines) {
+// Writes: data/<ticker>/<tf>.csv   (matches typical fetch script output)
+static void write_csv_with_ext(const std::string& ticker, const std::string& tf,
+                               const std::string& body_lines) {
     fs::create_directories(fs::path("data") / ticker);
 
-    // IMPORTANT: matches your reader: data/<ticker>/<tf>  (no ".csv")
-    const fs::path p = fs::path("data") / ticker / tf;
+    const fs::path p = fs::path("data") / ticker / (tf + ".csv");
 
     std::ofstream out(p, std::ios::trunc);
     ASSERT_TRUE(out.is_open()) << "Cannot write: " << p.string();
@@ -84,21 +84,21 @@ struct DataFetcherSimple : ::testing::Test {
             fs::remove(sp, ec);
         }
 
-        // Remove data files we created: data/<ticker>/<tf> (no extension)
+        // Remove data files we created: data/<ticker>/<tf>.csv
         std::error_code ec;
-        fs::remove(fs::path("data") / t1 / tf, ec);
-        fs::remove(fs::path("data") / t2 / tf, ec);
+        fs::remove(fs::path("data") / t1 / (tf + ".csv"), ec);
+        fs::remove(fs::path("data") / t2 / (tf + ".csv"), ec);
 
         fs::current_path(old_cwd);
     }
 };
 
 TEST_F(DataFetcherSimple, LoadsAndIterates) {
-    write_csv_no_ext(t1, tf,
+    write_csv_with_ext(t1, tf,
         "2024-01-02 03:04:05+00:00,1,2,0.5,1.5,100\n"
         "2024-01-02 03:04:06+00:00,2,3,1.5,2.5,200\n"
     );
-    write_csv_no_ext(t2, tf,
+    write_csv_with_ext(t2, tf,
         "2024-01-02 03:04:05+00:00,10,20,5,15,1000\n"
         "2024-01-02 03:04:06+00:00,20,30,15,25,2000\n"
     );
@@ -123,11 +123,11 @@ TEST_F(DataFetcherSimple, LoadsAndIterates) {
 }
 
 TEST_F(DataFetcherSimple, ThrowsOnInconsistentBarCounts) {
-    write_csv_no_ext(t1, tf,
+    write_csv_with_ext(t1, tf,
         "2024-01-02 03:04:05+00:00,1,2,0.5,1.5,100\n"
         "2024-01-02 03:04:06+00:00,2,3,1.5,2.5,200\n"
     );
-    write_csv_no_ext(t2, tf,
+    write_csv_with_ext(t2, tf,
         "2024-01-02 03:04:05+00:00,10,20,5,15,1000\n"
     );
 
@@ -136,10 +136,10 @@ TEST_F(DataFetcherSimple, ThrowsOnInconsistentBarCounts) {
 }
 
 TEST_F(DataFetcherSimple, NextBarThrowsOnMissingTickerKey) {
-    write_csv_no_ext(t1, tf,
+    write_csv_with_ext(t1, tf,
         "2024-01-02 03:04:05+00:00,1,2,0.5,1.5,100\n"
     );
-    write_csv_no_ext(t2, tf,
+    write_csv_with_ext(t2, tf,
         "2024-01-02 03:04:05+00:00,10,20,5,15,1000\n"
     );
 
@@ -149,4 +149,4 @@ TEST_F(DataFetcherSimple, NextBarThrowsOnMissingTickerKey) {
     EXPECT_THROW(df.next_bar("NOT_A_TICKER"), std::out_of_range);
 }
 
-} // namespace bt::test
+} 
