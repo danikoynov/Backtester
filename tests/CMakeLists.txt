@@ -13,10 +13,10 @@ add_executable(unit_tests
     execution/test_fill.cpp
     execution/test_order_book.cpp
     domain/test_order.cpp
+    domain/test_portfolio.cpp
     domain/test_ticker.cpp
     engine/test_action.cpp
     engine/test_broker.cpp
-    test_portfolio.cpp
     data/test_bar.cpp
     data/test_detail.cpp
     data/test_data_fetcher.cpp
