@@ -20,7 +20,8 @@ namespace bt {
     }
 
     Portfolio::Portfolio(double initial_value) 
-        : initial_value_(initial_value) {
+        : initial_value_(initial_value),
+          cash_(initial_value) {
     }
 
     double Portfolio::initial_value() const {
