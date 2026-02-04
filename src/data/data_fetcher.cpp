@@ -18,9 +18,10 @@ namespace bt{
         Timeframe timeframe
     )
         : instruments_(instruments), timeframe_(timeframe) {
-        std::cout<<"CONSTRUCTOR"<<std::endl;
         populate_tickers();
+        std::cout<<"Population complete"<<std::endl;
         load_data_from_csvs();
+        std::cout<<"Data Loaded"<<std::endl;
     }   
 
     void DataFetcher::populate_ticker(Ticker ticker) const{
@@ -39,8 +40,8 @@ namespace bt{
             ticker_symbol +
             " --timeframe " +
             tf;
-        std::cout << "CWD: " << fs::current_path().string() << "\n";
-        std::cout<<"System path: " << cmd.c_str() << std::endl;
+        //std::cout << "CWD: " << fs::current_path().string() << "\n";
+        //std::cout<<"System path: " << cmd.c_str() << std::endl;
         const int rc = std::system(
             cmd.c_str()
         );
@@ -69,14 +70,14 @@ namespace bt{
         
         while(std::getline(file, line)) {
             std::vector<std::string> res = split_csv_line(line);
-
-            Timestamp ts = parse_timestamp_seconds(res[0]);
+            
+            Timestamp ts = parse_timestamp(res[0]);
             double open = parse_double(res[1]);
             double high = parse_double(res[2]);
             double low = parse_double(res[3]);
             double close = parse_double(res[4]);
             std::int64_t volume = parse_int64_t(res[5]);
-            
+ 
             Bar bar(ts, open, high, low, close, volume);
             data_[ticker].push_back(bar);
         }   

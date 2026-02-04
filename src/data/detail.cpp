@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <iostream>
 
 namespace bt {
 
@@ -79,7 +80,7 @@ namespace bt {
         const int hour = parse_int(sv.substr(11, 2));
         const int minute = parse_int(sv.substr(14, 2));
         const int second = parse_int(sv.substr(17, 2));
-    
+        
         if (month < 1 || month > 12)  throw std::invalid_argument("Month out of range");
         if (day   < 1 || day   > 31)  throw std::invalid_argument("Day out of range");
         if (hour  < 0 || hour  > 23)  throw std::invalid_argument("Hour out of range");
@@ -100,4 +101,42 @@ namespace bt {
         return ts;
     }
 
+    Timestamp parse_timestamp_daily(std::string_view sv) {
+        if (sv.size() != 10 ||
+            sv[4] != '-' || sv[7] != '-') {
+            throw std::invalid_argument("Invalid daily date format (expected YYYY-MM-DD)");
+        }
+
+        const int year  = parse_int(sv.substr(0, 4));
+        const int month = parse_int(sv.substr(5, 2));
+        const int day   = parse_int(sv.substr(8, 2));
+
+        if (month < 1 || month > 12) {
+            throw std::invalid_argument("Month out of range");
+        }
+        if (day < 1 || day > 31) {
+            throw std::invalid_argument("Day out of range");
+        }
+
+        const std::chrono::year_month_day ymd{
+            std::chrono::year{year},
+            std::chrono::month{static_cast<unsigned>(month)},
+            std::chrono::day{static_cast<unsigned>(day)}
+        };
+
+        // This catches invalid dates like 2024-02-30, 2023-04-31, etc.
+        if (!ymd.ok()) {
+            throw std::invalid_argument("Invalid calendar date");
+        }
+
+        // Midnight at start of that day
+        return std::chrono::sys_days{ymd};
+    }
+    
+    Timestamp parse_timestamp(std::string_view sv) {
+        if (sv.size() == 10) {
+            return parse_timestamp_daily(sv);
+        }
+        return parse_timestamp_seconds(sv);
+    }
 }

@@ -60,4 +60,9 @@ namespace bt {
         Throws std::invalid_argument on format/parse/range errors.
     */
     Timestamp parse_timestamp_seconds(std::string_view sv);
+
+    Timestamp parse_timestamp_daily(std::string_view sv);
+
+    Timestamp parse_timestamp(std::string_view sv);
+    
 }
